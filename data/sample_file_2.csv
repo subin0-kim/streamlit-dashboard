@@ -1,0 +1,5 @@
+BATCH,Framework,TPM,Latency,First Token,decode,RPM,TPS,RPS,ms/Token,Error Ratio,Requests,AVG output Tokens
+50,sglang-0.3.5-gemma3-27b-fp16,92479,1.64,4.0,0.06,234,1541.32,3.9,0.65,0.0071,580,395
+60,sglang-0.3.5-gemma3-27b-fp16,116451,1.77,4.0,0.04,281,1940.85,4.69,0.52,0.0091,490,414
+70,sglang-0.3.5-gemma3-27b-fp16,127963,0.93,4.0,0.05,332,2132.72,5.53,0.47,0.002,473,386
+80,sglang-0.3.5-gemma3-27b-fp16,144627,1.65,4.0,0.03,366,2410.45,6.1,0.41,0.0144,249,395

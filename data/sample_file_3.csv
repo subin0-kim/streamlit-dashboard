@@ -1,0 +1,5 @@
+BATCH,Framework,TPM,Latency,First Token,decode,RPM,TPS,RPS,ms/Token,Error Ratio,Requests,AVG output Tokens
+50,tensorrt-8.6.1-qwen2-int4,71571,1.15,4.0,0.04,187,1192.85,3.11,0.84,0.0075,180,383
+100,tensorrt-8.6.1-qwen2-int4,160004,0.87,4.0,0.02,412,2666.73,6.86,0.37,0.0059,565,389
+150,tensorrt-8.6.1-qwen2-int4,216678,2.28,4.0,0.09,566,3611.3,9.43,0.28,0.0043,458,383
+200,tensorrt-8.6.1-qwen2-int4,259622,0.71,4.0,0.08,661,4327.03,11.01,0.23,0.0177,817,393
