@@ -127,15 +127,25 @@ def dashboard_page():
 
 
 def file_management_page():
-    st.header("File Upload")
-    uploaded_files = st.file_uploader("Upload CSV", type="csv", accept_multiple_files=True)
-    for uploaded in uploaded_files or []:
-        filepath = data_dir / uploaded.name
-        with open(filepath, "wb") as f:
-            f.write(uploaded.getbuffer())
-        alias = uploaded.name.rsplit(".", 1)[0]
-        db.add_file(uploaded.name, alias=alias)
-    if uploaded_files:
+    if "upload_done" not in st.session_state:
+        st.session_state["upload_done"] = False
+
+    if not st.session_state["upload_done"]:
+        st.header("File Upload")
+        uploaded_files = st.file_uploader(
+            "Upload CSV", type="csv", accept_multiple_files=True
+        )
+        for uploaded in uploaded_files or []:
+            filepath = data_dir / uploaded.name
+            with open(filepath, "wb") as f:
+                f.write(uploaded.getbuffer())
+            alias = uploaded.name.rsplit(".", 1)[0]
+            db.add_file(uploaded.name, alias=alias)
+        if uploaded_files:
+            st.session_state["upload_done"] = True
+            st.success("File uploaded")
+            st.experimental_rerun()
+    else:
         st.success("File uploaded")
 
     st.header("File Listing")
