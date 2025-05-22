@@ -10,7 +10,14 @@ data_dir = Path("data")
 data_dir.mkdir(exist_ok=True)
 
 def load_csv(file_path: Path) -> pd.DataFrame:
+    """Load a CSV file and normalise column names.
+
+    Column names are converted to lowercase so that the application works even
+    if the original CSV contains different capitalisation (e.g. "tpm" vs
+    "TPM").
+    """
     df = pd.read_csv(file_path)
+    df.columns = [c.strip().lower() for c in df.columns]
     return df
 
 
@@ -64,37 +71,41 @@ def sidebar_upload():
 
 
 def show_metrics(df: pd.DataFrame, metric: str, goodput: dict):
-    filtered = df[(df["First Token"] <= goodput["TTFT"]) & (df["decode"] <= goodput["TPOT"])]
+    """Display charts for a given metric.
+
+    Assumes dataframe columns are in lowercase as produced by ``load_csv``.
+    """
+    filtered = df[(df["first token"] <= goodput["TTFT"]) & (df["decode"] <= goodput["TPOT"])]
     if filtered.empty:
         st.write("No data matching goodput conditions")
         return
 
     if metric == "TPM":
-        max_val = filtered["TPM"].max()
-        fig = px.bar(filtered, x="BATCH", y="TPM", text="TPM")
+        max_val = filtered["tpm"].max()
+        fig = px.bar(filtered, x="batch", y="tpm", text="tpm")
         fig.update_traces(texttemplate="%{text:.0f}")
         st.plotly_chart(fig, use_container_width=True)
         with st.expander("Performance Summary - TPM"):
-            st.dataframe(filtered[["BATCH", "TPM"]])
+            st.dataframe(filtered[["batch", "tpm"]])
         st.caption(f"Max TPM: {max_val}")
     elif metric == "RPM":
-        max_val = filtered["RPM"].max()
-        fig = px.bar(filtered, x="BATCH", y="RPM", text="RPM")
+        max_val = filtered["rpm"].max()
+        fig = px.bar(filtered, x="batch", y="rpm", text="rpm")
         fig.update_traces(texttemplate="%{text:.0f}")
         st.plotly_chart(fig, use_container_width=True)
         with st.expander("Performance Summary - RPM"):
-            st.dataframe(filtered[["BATCH", "RPM"]])
+            st.dataframe(filtered[["batch", "rpm"]])
         st.caption(f"Max RPM: {max_val}")
     elif metric == "TPM Trend":
-        fig = px.line(df, x="BATCH", y="TPM")
+        fig = px.line(df, x="batch", y="tpm")
         st.plotly_chart(fig, use_container_width=True)
         with st.expander("Performance Summary - TPM Trend"):
-            st.dataframe(df[["BATCH", "TPM"]])
+            st.dataframe(df[["batch", "tpm"]])
     elif metric == "RPM Trend":
-        fig = px.line(df, x="BATCH", y="RPM")
+        fig = px.line(df, x="batch", y="rpm")
         st.plotly_chart(fig, use_container_width=True)
         with st.expander("Performance Summary - RPM Trend"):
-            st.dataframe(df[["BATCH", "RPM"]])
+            st.dataframe(df[["batch", "rpm"]])
 
 
 def dashboard_page():
