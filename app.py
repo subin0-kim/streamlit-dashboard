@@ -65,8 +65,13 @@ def sidebar_upload():
 
 def show_metrics(df: pd.DataFrame, metric: str, goodput: dict):
     filtered = df[(df["First Token"] <= goodput["TTFT"]) & (df["decode"] <= goodput["TPOT"])]
+
     if filtered.empty:
-        st.write("No data matching goodput conditions")
+        placeholder = pd.DataFrame({"BATCH": [1], metric: [1]})
+        fig = px.bar(placeholder, x="BATCH", y=metric, text=metric)
+        fig.update_traces(texttemplate="%{text:.0f}")
+        st.plotly_chart(fig, use_container_width=True)
+        st.caption("No data matching goodput conditions, showing 1")
         return
 
     if metric == "TPM":
